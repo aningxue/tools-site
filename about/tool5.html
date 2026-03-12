@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>厘米英寸换算</title>
+    <style>
+        body{padding:20px;text-align:center}
+        input{margin:10px;width:150px;padding:6px}
+    </style>
+</head>
+<body>
+<h3>厘米 ↔ 英寸</h3>
+厘米 <input type="number" oninput="c()" id="a">
+<br>
+英寸 <input type="number" oninput="i()" id="b">
+<script>
+    function c(){
+        let v = document.getElementById('a').value
+        document.getElementById('b').value = (v/2.54).toFixed(2)
+    }
+    function i(){
+        let v = document.getElementById('b').value
+        document.getElementById('a').value = (v*2.54).toFixed(2)
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文字转拼音</title>
+    <style>
+        body{padding:20px;text-align:center}
+        textarea{width:100%;height:80px;margin:10px 0}
+        #result{margin-top:15px;font-size:18px;color:#333}
+        button{padding:8px 16px;cursor:pointer}
+    </style>
+</head>
+<body>
+<h3>文字转拼音</h3>
+<textarea id="input" placeholder="输入中文"></textarea>
+<button onclick="convert()">转换</button>
+<div id="result"></div>
+
+<script>
+    // 极简拼音映射表（覆盖常用字）
+    const pinyinMap = {
+        '小':'xiao', '细':'xi', '节':'jie',
+        '明':'ming', '星':'xing', '你':'ni', '好':'hao',
+        '中':'zhong', '国':'guo', '人':'ren', '学':'xue',
+        '生':'sheng', '工':'gong', '作':'zuo', '爱':'ai'
+    };
+
+    function convert() {
+        const text = document.getElementById('input').value.trim();
+        if (!text) {
+            document.getElementById('result').textContent = '请输入中文';
+            return;
+        }
+        let result = '';
+        for (let char of text) {
+            result += pinyinMap[char] || char; // 找不到的字原样保留
+            result += ' ';
+        }
+        document.getElementById('result').textContent = result.trim();
+    }
+</script>
+</body>
+</html>

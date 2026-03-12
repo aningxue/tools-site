@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳转换</title>
+    <style>
+        body{padding:20px;text-align:center}
+        input{margin:10px;width:200px}
+    </style>
+</head>
+<body>
+<h3>时间戳 → 时间</h3>
+<input type="number" id="ts" placeholder="时间戳">
+<button onclick="conv()">转换</button>
+<p id="t"></p>
+<script>
+    function conv(){
+        let v = document.getElementById('ts').value
+        let d = new Date(v*1000)
+        document.getElementById('t').textContent = d.toLocaleString()
+    }
+</script>
+</body>
+</html>

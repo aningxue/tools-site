@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本翻转</title>
+    <style>
+        body{padding:20px;text-align:center}
+        textarea{width:100%;height:100px;margin:10px 0}
+    </style>
+</head>
+<body>
+<h3>文本翻转</h3>
+<textarea id="i"></textarea>
+<button onclick="rev()">翻转</button>
+<p id="o"></p>
+<script>
+    function rev(){
+        let t = document.getElementById('i').value
+        document.getElementById('o').textContent = t.split('').reverse().join('')
+    }
+</script>
+</body>
+</html>

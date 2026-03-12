@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成</title>
+    <style>
+        body{padding:20px;text-align:center}
+        input{width:250px;margin:10px}
+        img{margin-top:20px}
+    </style>
+</head>
+<body>
+<h3>二维码生成</h3>
+<input id="txt" placeholder="输入内容">
+<button onclick="qrc()">生成</button>
+<br>
+<img id="q">
+<script>
+    function qrc(){
+        let t = document.getElementById('txt').value
+        document.getElementById('q').src =
+            `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${t}`
+    }
+</script>
+</body>
+</html>

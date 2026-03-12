@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>年龄计算器</title>
+    <style>
+        body{padding:20px;text-align:center}
+        input{margin:10px}
+    </style>
+</head>
+<body>
+<h3>年龄计算器</h3>
+<input type="date" id="d">
+<button onclick="age()">计算</button>
+<p id="r"></p>
+<script>
+    function age(){
+        let b = new Date(document.getElementById('d').value)
+        let now = new Date()
+        let a = now.getFullYear() - b.getFullYear()
+        document.getElementById('r').textContent = '年龄：'+a+' 岁'
+    }
+</script>
+</body>
+</html>

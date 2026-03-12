@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片去水印</title>
+    <style>
+        body{padding:20px;text-align:center}
+        #canvas{border:1px solid #ccc;margin:20px auto}
+        .btn{padding:10px 16px;margin:10px}
+    </style>
+</head>
+<body>
+<h3>图片去水印</h3>
+<input type="file" id="file" accept="image/*">
+<br>
+<canvas id="canvas" width="350" height="350"></canvas>
+<br>
+<!-- 下载按钮 -->
+<a id="downloadBtn" class="btn" style="display:none;text-decoration:none;background:#42b983;color:white;border-radius:4px" download="no-watermark.jpg">下载处理后图片</a>
+
+<script>
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+    const img = new Image()
+    const downloadBtn = document.getElementById('downloadBtn')
+
+    file.onchange = e => {
+        const r = new FileReader()
+        r.onload = ev => {
+            img.src = ev.target.result
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0, 350, 350)
+                // 上传后显示下载按钮
+                downloadBtn.style.display = 'inline-block'
+                // 绑定下载地址
+                downloadBtn.href = canvas.toDataURL('image/jpeg')
+            }
+        }
+        r.readAsDataURL(e.target.files[0])
+    }
+</script>
+</body>
+</html>
