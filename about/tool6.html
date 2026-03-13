@@ -1,26 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>年龄计算器</title>
+    <title>年龄计算器 - 免费在线年龄计算工具</title>
+    <meta name="description" content="免费在线年龄计算器，本地处理保护隐私，根据输入的出生日期计算对应的年龄（按年份计算），无需联网即可使用，操作简单便捷。">
     <style>
-        body{padding:20px;text-align:center}
-        input{margin:10px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            padding:20px;
+            max-width:800px;
+            margin:0 auto;
+            font-family:'Microsoft YaHei', Arial, sans-serif;
+            background-color:#f8f9fa;
+            color:#333;
+            text-align:center;
+        }
+        header{
+            margin-bottom:30px;
+            padding-bottom:20px;
+            border-bottom:1px solid #eee;
+        }
+        h3{
+            font-size:24px;
+            color:#2c3e50;
+            margin-bottom:15px;
+        }
+        .tool-desc{
+            font-size:16px;
+            color:#666;
+            line-height:1.6;
+            margin-bottom:20px;
+            max-width:600px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .privacy-tip{
+            color:#e74c3c;
+            font-size:14px;
+            margin:10px 0;
+            padding:10px;
+            background:#ffeaea;
+            border-radius:8px;
+            display:inline-block;
+        }
+        input{
+            padding:12px 15px;
+            margin:10px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            font-size:16px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+        button{
+            padding:12px 24px;
+            background:#3498db;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+            transition:all 0.3s ease;
+            box-shadow:0 2px 6px rgba(52,152,219,0.2);
+        }
+        button:hover{
+            background:#2980b9;
+        }
+        .result{
+            margin:20px 0;
+            padding:15px;
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            font-size:18px;
+            color:#2c3e50;
+        }
+        .back-home{
+            display:inline-block;
+            margin-top:30px;
+            padding:10px 20px;
+            background:#2ecc71;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(46,204,113,0.2);
+        }
+        .back-home:hover{
+            background:#27ae60;
+        }
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding-top:20px;
+            border-top:1px solid #eee;
+            color:#999;
+            font-size:14px;
+        }
     </style>
 </head>
 <body>
-<h3>年龄计算器</h3>
-<input type="date" id="d">
-<button onclick="age()">计算</button>
-<p id="r"></p>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
+<header>
+    <h3>免费在线年龄计算器</h3>
+    <p class="tool-desc">本工具可根据您输入的出生日期，快速计算对应的年龄（按年份计算）。所有计算操作均在本地浏览器完成，不会上传您的出生日期信息，保护隐私安全。</p>
+    <p class="privacy-tip">✅ 出生日期仅在本地处理，无任何数据上传</p>
+</header>
+
+<input type="date" id="birthDate" placeholder="选择出生日期">
+<button onclick="calculateAge()">计算年龄</button>
+<div class="result">计算结果：<span id="ageResult">请选择出生日期并点击计算</span></div>
+
+<br>
+<a class="back-home" href="../index.html">返回工具首页</a>
+
+<footer>
+    <p>年龄计算器按年份计算年龄，结果为周岁 | 隐私保障：本地处理，无数据上传</p>
+</footer>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 <script>
-    function age(){
-        let b = new Date(document.getElementById('d').value)
-        let now = new Date()
-        let a = now.getFullYear() - b.getFullYear()
-        document.getElementById('r').textContent = '年龄：'+a+' 岁'
+    function calculateAge() {
+        const birthDateInput = document.getElementById('birthDate');
+        const ageResult = document.getElementById('ageResult');
+
+        if (!birthDateInput.value) {
+            ageResult.textContent = '请选择有效的出生日期';
+            return;
+        }
+
+        const birthDate = new Date(birthDateInput.value);
+        const today = new Date();
+
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        // 如果本月还没到生日，年龄减1
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        if (age < 0) {
+            ageResult.textContent = '出生日期不能晚于当前日期';
+        } else {
+            ageResult.textContent = `您的年龄是：${age} 岁`;
+        }
     }
 </script>
 </body>

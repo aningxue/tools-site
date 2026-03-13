@@ -1,25 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>时间戳转换</title>
+    <title>时间戳转换 - 免费在线时间戳处理工具</title>
+    <meta name="description" content="免费在线时间戳转换工具，本地处理保护隐私，支持将10位Unix时间戳转换为本地可读的日期时间格式，无需联网即可使用，操作简单便捷。">
     <style>
-        body{padding:20px;text-align:center}
-        input{margin:10px;width:200px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            padding:20px;
+            max-width:800px;
+            margin:0 auto;
+            font-family:'Microsoft YaHei', Arial, sans-serif;
+            background-color:#f8f9fa;
+            color:#333;
+            text-align:center;
+        }
+        header{
+            margin-bottom:30px;
+            padding-bottom:20px;
+            border-bottom:1px solid #eee;
+        }
+        h3{
+            font-size:24px;
+            color:#2c3e50;
+            margin-bottom:15px;
+        }
+        .tool-desc{
+            font-size:16px;
+            color:#666;
+            line-height:1.6;
+            margin-bottom:20px;
+            max-width:600px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .privacy-tip{
+            color:#e74c3c;
+            font-size:14px;
+            margin:10px 0;
+            padding:10px;
+            background:#ffeaea;
+            border-radius:8px;
+            display:inline-block;
+        }
+        input{
+            width:250px;
+            padding:12px 15px;
+            margin:10px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            font-size:16px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+        button{
+            padding:12px 24px;
+            background:#3498db;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+            transition:all 0.3s ease;
+            box-shadow:0 2px 6px rgba(52,152,219,0.2);
+        }
+        button:hover{
+            background:#2980b9;
+        }
+        .result{
+            margin:20px 0;
+            padding:15px;
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            font-size:18px;
+            color:#2c3e50;
+            line-height:1.8;
+        }
+        .back-home{
+            display:inline-block;
+            margin-top:30px;
+            padding:10px 20px;
+            background:#2ecc71;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(46,204,113,0.2);
+        }
+        .back-home:hover{
+            background:#27ae60;
+        }
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding-top:20px;
+            border-top:1px solid #eee;
+            color:#999;
+            font-size:14px;
+        }
     </style>
 </head>
 <body>
-<h3>时间戳 → 时间</h3>
-<input type="number" id="ts" placeholder="时间戳">
-<button onclick="conv()">转换</button>
-<p id="t"></p>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
+<header>
+    <h3>免费在线时间戳转换工具</h3>
+    <p class="tool-desc">本工具可将10位Unix时间戳转换为本地可读的日期时间格式（YYYY-MM-DD HH:MM:SS），所有转换操作均在本地浏览器完成，不会上传您的时间戳数据，保护隐私安全。</p>
+    <p class="privacy-tip">✅ 时间戳数据仅在本地处理，无任何数据上传</p>
+</header>
+
+<input type="number" id="timestampInput" placeholder="请输入10位Unix时间戳">
+<button onclick="convertTimestamp()">转换时间戳</button>
+<div class="result">
+    转换结果：<br>
+    <span id="timeResult">请输入有效的10位时间戳并点击转换</span>
+</div>
+
+<br>
+<a class="back-home" href="../index.html">返回工具首页</a>
+
+<footer>
+    <p>时间戳转换工具仅支持10位Unix时间戳，转换结果为本地时区时间 | 隐私保障：本地处理，无数据上传</p>
+</footer>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 <script>
-    function conv(){
-        let v = document.getElementById('ts').value
-        let d = new Date(v*1000)
-        document.getElementById('t').textContent = d.toLocaleString()
+    function convertTimestamp() {
+        const timestampInput = document.getElementById('timestampInput');
+        const timeResult = document.getElementById('timeResult');
+
+        const timestamp = timestampInput.value.trim();
+
+        if (!timestamp || timestamp.length !== 10 || isNaN(timestamp)) {
+            timeResult.textContent = '请输入有效的10位Unix时间戳';
+            return;
+        }
+
+        try {
+            const date = new Date(parseInt(timestamp) * 1000);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            timeResult.textContent = formattedDate;
+        } catch (e) {
+            timeResult.textContent = '时间戳格式错误，请重新输入';
+        }
     }
 </script>
 </body>

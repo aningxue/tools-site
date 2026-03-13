@@ -1,29 +1,142 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>厘米英寸换算</title>
+    <title>单位换算 - 免费在线厘米英寸换算工具</title>
+    <meta name="description" content="免费在线单位换算工具，本地处理保护隐私，支持厘米和英寸之间的双向换算，结果保留两位小数，无需联网即可使用，操作简单便捷。">
     <style>
-        body{padding:20px;text-align:center}
-        input{margin:10px;width:150px;padding:6px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            padding:20px;
+            max-width:800px;
+            margin:0 auto;
+            font-family:'Microsoft YaHei', Arial, sans-serif;
+            background-color:#f8f9fa;
+            color:#333;
+            text-align:center;
+        }
+        header{
+            margin-bottom:30px;
+            padding-bottom:20px;
+            border-bottom:1px solid #eee;
+        }
+        h3{
+            font-size:24px;
+            color:#2c3e50;
+            margin-bottom:15px;
+        }
+        .tool-desc{
+            font-size:16px;
+            color:#666;
+            line-height:1.6;
+            margin-bottom:20px;
+            max-width:600px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .privacy-tip{
+            color:#e74c3c;
+            font-size:14px;
+            margin:10px 0;
+            padding:10px;
+            background:#ffeaea;
+            border-radius:8px;
+            display:inline-block;
+        }
+        .input-group{
+            margin:20px 0;
+        }
+        input{
+            width:200px;
+            padding:12px 15px;
+            margin:10px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            font-size:16px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+        label{
+            font-size:18px;
+            color:#2c3e50;
+            margin-right:10px;
+        }
+        .back-home{
+            display:inline-block;
+            margin-top:30px;
+            padding:10px 20px;
+            background:#3498db;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(52,152,219,0.2);
+        }
+        .back-home:hover{
+            background:#2980b9;
+        }
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding-top:20px;
+            border-top:1px solid #eee;
+            color:#999;
+            font-size:14px;
+        }
     </style>
 </head>
 <body>
-<h3>厘米 ↔ 英寸</h3>
-厘米 <input type="number" oninput="c()" id="a">
+<header>
+    <h3>免费在线单位换算工具（厘米↔英寸）</h3>
+    <p class="tool-desc">本工具支持厘米和英寸之间的双向实时换算，换算比例为1英寸=2.54厘米，结果自动保留两位小数。所有换算计算均在本地浏览器完成，不会上传您的输入数据，保护隐私安全。</p>
+    <p class="privacy-tip">✅ 换算数据仅在本地处理，无任何数据上传</p>
+</header>
+
+<div class="input-group">
+    <label>厘米(cm)：</label>
+    <input type="number" id="cmInput" placeholder="输入厘米数值" step="0.01">
+</div>
+
+<div class="input-group">
+    <label>英寸(in)：</label>
+    <input type="number" id="inchInput" placeholder="输入英寸数值" step="0.01">
+</div>
+
 <br>
-英寸 <input type="number" oninput="i()" id="b">
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
+<a class="back-home" href="../index.html">返回工具首页</a>
+
+<footer>
+    <p>单位换算工具基于1英寸=2.54厘米标准换算，结果保留两位小数 | 隐私保障：本地处理，无数据上传</p>
+</footer>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 <script>
-    function c(){
-        let v = document.getElementById('a').value
-        document.getElementById('b').value = (v/2.54).toFixed(2)
-    }
-    function i(){
-        let v = document.getElementById('b').value
-        document.getElementById('a').value = (v*2.54).toFixed(2)
-    }
+    const cmInput = document.getElementById('cmInput');
+    const inchInput = document.getElementById('inchInput');
+    const CM_TO_INCH = 0.393701; // 1cm = 0.393701英寸
+    const INCH_TO_CM = 2.54;      // 1英寸 = 2.54cm
+
+    // 厘米转英寸
+    cmInput.addEventListener('input', function() {
+        if (this.value) {
+            const inchValue = (parseFloat(this.value) * CM_TO_INCH).toFixed(2);
+            inchInput.value = inchValue;
+        } else {
+            inchInput.value = '';
+        }
+    });
+
+    // 英寸转厘米
+    inchInput.addEventListener('input', function() {
+        if (this.value) {
+            const cmValue = (parseFloat(this.value) * INCH_TO_CM).toFixed(2);
+            cmInput.value = cmValue;
+        } else {
+            cmInput.value = '';
+        }
+    });
 </script>
 </body>
 </html>

@@ -1,26 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>颜色拾取器</title>
+    <title>颜色拾取器 - 免费在线颜色选择工具</title>
+    <meta name="description" content="免费在线颜色拾取器工具，本地处理保护隐私，可选择任意颜色并显示对应的十六进制颜色码，适用于网页设计、美工等场景，无需联网即可使用。">
     <style>
-        body{padding:20px;text-align:center}
-        input{margin:10px}
-        #c{width:100px;height:100px;margin:10px auto}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            padding:20px;
+            max-width:800px;
+            margin:0 auto;
+            font-family:'Microsoft YaHei', Arial, sans-serif;
+            background-color:#f8f9fa;
+            color:#333;
+            text-align:center;
+        }
+        header{
+            margin-bottom:30px;
+            padding-bottom:20px;
+            border-bottom:1px solid #eee;
+        }
+        h3{
+            font-size:24px;
+            color:#2c3e50;
+            margin-bottom:15px;
+        }
+        .tool-desc{
+            font-size:16px;
+            color:#666;
+            line-height:1.6;
+            margin-bottom:20px;
+            max-width:600px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .privacy-tip{
+            color:#e74c3c;
+            font-size:14px;
+            margin:10px 0;
+            padding:10px;
+            background:#ffeaea;
+            border-radius:8px;
+            display:inline-block;
+        }
+        .color-picker{
+            margin:20px 0;
+        }
+        input[type="color"]{
+            width:80px;
+            height:80px;
+            border:none;
+            border-radius:50%;
+            cursor:pointer;
+            box-shadow:0 2px 8px rgba(0,0,0,0.15);
+        }
+        .color-preview{
+            width:200px;
+            height:80px;
+            margin:20px auto;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            background:#ffffff;
+        }
+        .color-code{
+            margin:20px 0;
+            padding:15px;
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            font-size:24px;
+            font-weight:bold;
+            color:#2c3e50;
+        }
+        button{
+            padding:10px 20px;
+            background:#3498db;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+            transition:all 0.3s ease;
+            box-shadow:0 2px 6px rgba(52,152,219,0.2);
+        }
+        button:hover{
+            background:#2980b9;
+        }
+        .back-home{
+            display:inline-block;
+            margin-top:30px;
+            padding:10px 20px;
+            background:#2ecc71;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(46,204,113,0.2);
+        }
+        .back-home:hover{
+            background:#27ae60;
+        }
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding-top:20px;
+            border-top:1px solid #eee;
+            color:#999;
+            font-size:14px;
+        }
     </style>
 </head>
 <body>
-<h3>颜色拾取器</h3>
-<input type="color" oninput="pick()" id="i">
-<div id="c"></div>
-<p id="hex"></p>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
+<header>
+    <h3>免费在线颜色拾取器工具</h3>
+    <p class="tool-desc">本工具可帮助您选择任意颜色，并实时显示对应的十六进制颜色码（#RRGGBB），适用于网页设计、UI设计、美工等场景。所有操作均在本地浏览器完成，不会上传任何数据，保护隐私安全。</p>
+    <p class="privacy-tip">✅ 颜色选择操作仅在本地处理，无任何数据上传</p>
+</header>
+
+<div class="color-picker">
+    <input type="color" id="colorInput" value="#ffffff">
+</div>
+
+<div class="color-preview" id="colorPreview"></div>
+<div class="color-code" id="colorCode">#FFFFFF</div>
+<button onclick="copyColorCode()">复制颜色码</button>
+
+<br>
+<a class="back-home" href="../index.html">返回工具首页</a>
+
+<footer>
+    <p>颜色拾取器工具显示标准十六进制颜色码，支持一键复制 | 隐私保障：本地处理，无数据上传</p>
+</footer>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 <script>
-    function pick(){
-        let v = document.getElementById('i').value
-        document.getElementById('c').style.background = v
-        document.getElementById('hex').textContent = v
+    const colorInput = document.getElementById('colorInput');
+    const colorPreview = document.getElementById('colorPreview');
+    const colorCode = document.getElementById('colorCode');
+
+    // 初始化
+    updateColor();
+
+    // 颜色选择变化时更新
+    colorInput.addEventListener('input', updateColor);
+
+    function updateColor() {
+        const color = colorInput.value;
+        colorPreview.style.backgroundColor = color;
+        colorCode.textContent = color.toUpperCase();
+    }
+
+    // 复制颜色码
+    function copyColorCode() {
+        const text = colorCode.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            alert(`颜色码 ${text} 已复制到剪贴板`);
+        }).catch(err => {
+            alert('复制失败，请手动复制');
+            console.error('复制失败:', err);
+        });
     }
 </script>
 </body>

@@ -1,27 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>二维码生成</title>
+    <title>二维码生成 - 免费在线二维码制作工具</title>
+    <meta name="description" content="免费在线二维码生成工具，支持将文本、网址等内容生成二维码图片，可直接下载使用，操作简单便捷，无需下载软件。">
     <style>
-        body{padding:20px;text-align:center}
-        input{width:250px;margin:10px}
-        img{margin-top:20px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            padding:20px;
+            max-width:800px;
+            margin:0 auto;
+            font-family:'Microsoft YaHei', Arial, sans-serif;
+            background-color:#f8f9fa;
+            color:#333;
+            text-align:center;
+        }
+        header{
+            margin-bottom:30px;
+            padding-bottom:20px;
+            border-bottom:1px solid #eee;
+        }
+        h3{
+            font-size:24px;
+            color:#2c3e50;
+            margin-bottom:15px;
+        }
+        .tool-desc{
+            font-size:16px;
+            color:#666;
+            line-height:1.6;
+            margin-bottom:20px;
+            max-width:600px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .privacy-tip{
+            color:#e74c3c;
+            font-size:14px;
+            margin:10px 0;
+            padding:10px;
+            background:#ffeaea;
+            border-radius:8px;
+            display:inline-block;
+        }
+        textarea{
+            width:100%;
+            height:120px;
+            margin:10px 0;
+            padding:15px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            font-size:16px;
+            resize:vertical;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+        button{
+            padding:12px 24px;
+            background:#3498db;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+            transition:all 0.3s ease;
+            box-shadow:0 2px 6px rgba(52,152,219,0.2);
+        }
+        button:hover{
+            background:#2980b9;
+        }
+        #qrcode{
+            margin:20px auto;
+            padding:10px;
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            display:inline-block;
+        }
+        .download-btn{
+            display:none;
+            margin-top:20px;
+            padding:12px 24px;
+            background:#42b983;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(66,185,131,0.2);
+        }
+        .download-btn:hover{
+            background:#36a972;
+        }
+        .back-home{
+            display:inline-block;
+            margin-top:30px;
+            padding:10px 20px;
+            background:#2ecc71;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(46,204,113,0.2);
+        }
+        .back-home:hover{
+            background:#27ae60;
+        }
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding-top:20px;
+            border-top:1px solid #eee;
+            color:#999;
+            font-size:14px;
+        }
     </style>
+    <!-- 引入QRCode库 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 </head>
 <body>
-<h3>二维码生成</h3>
-<input id="txt" placeholder="输入内容">
-<button onclick="qrc()">生成</button>
+<header>
+    <h3>免费在线二维码生成工具</h3>
+    <p class="tool-desc">本工具可将输入的文本、网址、联系方式等内容生成高清二维码图片，生成的二维码可直接下载保存使用。二维码生成过程中，内容仅在本地处理，保护您的信息安全。</p>
+    <p class="privacy-tip">✅ 生成二维码的内容仅在本地处理，无任何数据上传</p>
+</header>
+
+<textarea id="qrContent" placeholder="请输入需要生成二维码的内容（文本、网址等）..."></textarea>
 <br>
-<img id="q">
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
+<button onclick="generateQRCode()">生成二维码</button>
+<div id="qrcode"></div>
+<a id="downloadQR" class="download-btn" download="qrcode.png">下载二维码图片</a>
+
+<br>
+<a class="back-home" href="../index.html">返回工具首页</a>
+
+<footer>
+    <p>二维码生成工具支持文本、网址等内容，生成的二维码高清可下载 | 隐私保障：本地处理，无数据上传</p>
+</footer>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 <script>
-    function qrc(){
-        let t = document.getElementById('txt').value
-        document.getElementById('q').src =
-            `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${t}`
+    function generateQRCode() {
+        const content = document.getElementById('qrContent').value.trim();
+        const qrcodeDiv = document.getElementById('qrcode');
+        const downloadBtn = document.getElementById('downloadQR');
+
+        if (!content) {
+            alert('请输入需要生成二维码的内容');
+            return;
+        }
+
+        // 清空之前的二维码
+        qrcodeDiv.innerHTML = '';
+
+        // 生成二维码
+        QRCode.toCanvas(qrcodeDiv, content, {
+            width: 256,
+            margin: 1,
+            color: {
+                dark: '#000000',
+                light: '#ffffff'
+            }
+        }, function (error) {
+            if (error) {
+                console.error(error);
+                alert('二维码生成失败，请重试');
+            } else {
+                // 显示下载按钮
+                downloadBtn.style.display = 'inline-block';
+                // 获取canvas并生成下载链接
+                const canvas = qrcodeDiv.querySelector('canvas');
+                downloadBtn.href = canvas.toDataURL('image/png');
+            }
+        });
     }
 </script>
 </body>

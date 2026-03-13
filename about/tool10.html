@@ -1,44 +1,189 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文字转拼音</title>
+    <title>文字转拼音 - 免费在线拼音转换工具</title>
+    <meta name="description" content="免费在线文字转拼音工具，本地处理保护隐私，可将输入的中文字符转换为对应的拼音，未收录的汉字将原样保留，无需联网即可使用。">
     <style>
-        body{padding:20px;text-align:center}
-        textarea{width:100%;height:80px;margin:10px 0}
-        #result{margin-top:15px;font-size:18px;color:#333}
-        button{padding:8px 16px;cursor:pointer}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            padding:20px;
+            max-width:800px;
+            margin:0 auto;
+            font-family:'Microsoft YaHei', Arial, sans-serif;
+            background-color:#f8f9fa;
+            color:#333;
+            text-align:center;
+        }
+        header{
+            margin-bottom:30px;
+            padding-bottom:20px;
+            border-bottom:1px solid #eee;
+        }
+        h3{
+            font-size:24px;
+            color:#2c3e50;
+            margin-bottom:15px;
+        }
+        .tool-desc{
+            font-size:16px;
+            color:#666;
+            line-height:1.6;
+            margin-bottom:20px;
+            max-width:600px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .privacy-tip{
+            color:#e74c3c;
+            font-size:14px;
+            margin:10px 0;
+            padding:10px;
+            background:#ffeaea;
+            border-radius:8px;
+            display:inline-block;
+        }
+        textarea{
+            width:100%;
+            height:120px;
+            margin:10px 0;
+            padding:15px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            font-size:16px;
+            resize:vertical;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+        button{
+            padding:12px 24px;
+            background:#3498db;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+            transition:all 0.3s ease;
+            box-shadow:0 2px 6px rgba(52,152,219,0.2);
+        }
+        button:hover{
+            background:#2980b9;
+        }
+        #pinyinResult{
+            margin-top:20px;
+            padding:15px;
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            min-height:60px;
+            text-align:left;
+            white-space:pre-wrap;
+            word-wrap:break-word;
+            font-size:16px;
+            line-height:1.8;
+        }
+        .copy-btn{
+            margin-top:15px;
+            padding:10px 20px;
+            background:#42b983;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+            box-shadow:0 2px 6px rgba(66,185,131,0.2);
+        }
+        .copy-btn:hover{
+            background:#36a972;
+        }
+        .back-home{
+            display:inline-block;
+            margin-top:30px;
+            padding:10px 20px;
+            background:#2ecc71;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(46,204,113,0.2);
+        }
+        .back-home:hover{
+            background:#27ae60;
+        }
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding-top:20px;
+            border-top:1px solid #eee;
+            color:#999;
+            font-size:14px;
+        }
     </style>
+    <!-- 引入pinyin库 -->
+    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.18.4/dist/pinyin-pro.js"></script>
 </head>
 <body>
-<h3>文字转拼音</h3>
-<textarea id="input" placeholder="输入中文"></textarea>
-<button onclick="convert()">转换</button>
-<div id="result"></div>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
+<header>
+    <h3>免费在线文字转拼音工具</h3>
+    <p class="tool-desc">本工具可将输入的中文字符转换为对应的拼音，支持常用汉字的拼音转换，未收录的汉字将原样保留。所有转换操作均在本地浏览器完成，不会上传您的文本内容，保护隐私安全。</p>
+    <p class="privacy-tip">✅ 文本内容仅在本地处理，无任何数据上传</p>
+</header>
+
+<textarea id="chineseText" placeholder="请输入需要转换为拼音的中文内容..."></textarea>
+<br>
+<button onclick="convertToPinyin()">转换为拼音</button>
+<div id="pinyinResult">转换结果将显示在这里...</div>
+<button class="copy-btn" onclick="copyPinyin()">复制拼音结果</button>
+
+<br>
+<a class="back-home" href="../index.html">返回工具首页</a>
+
+<footer>
+    <p>文字转拼音工具支持常用汉字转换，未收录汉字将原样保留 | 隐私保障：本地处理，无数据上传</p>
+</footer>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script>
+<!-- End Cloudflare Web Analytics -->
 
 <script>
-    // 极简拼音映射表（覆盖常用字）
-    const pinyinMap = {
-        '小':'xiao', '细':'xi', '节':'jie',
-        '明':'ming', '星':'xing', '你':'ni', '好':'hao',
-        '中':'zhong', '国':'guo', '人':'ren', '学':'xue',
-        '生':'sheng', '工':'gong', '作':'zuo', '爱':'ai'
-    };
+    function convertToPinyin() {
+        const inputText = document.getElementById('chineseText').value.trim();
+        const resultDiv = document.getElementById('pinyinResult');
 
-    function convert() {
-        const text = document.getElementById('input').value.trim();
-        if (!text) {
-            document.getElementById('result').textContent = '请输入中文';
+        if (!inputText) {
+            resultDiv.textContent = '请输入需要转换的中文内容';
             return;
         }
-        let result = '';
-        for (let char of text) {
-            result += pinyinMap[char] || char; // 找不到的字原样保留
-            result += ' ';
+
+        try {
+            // 使用pinyin-pro库转换拼音
+            const pinyin = pinyinPro.convert(inputText, {
+                type: 'array', // 输出数组格式
+                toneType: 'none' // 不带声调
+            });
+
+            // 转换为字符串
+            const pinyinStr = pinyin.join(' ');
+            resultDiv.textContent = pinyinStr;
+        } catch (e) {
+            resultDiv.textContent = '转换失败，请重试';
+            console.error('拼音转换失败:', e);
         }
-        document.getElementById('result').textContent = result.trim();
+    }
+
+    function copyPinyin() {
+        const resultText = document.getElementById('pinyinResult').textContent;
+        if (resultText === '转换结果将显示在这里...' || resultText === '请输入需要转换的中文内容') {
+            alert('暂无可复制的拼音内容');
+            return;
+        }
+
+        navigator.clipboard.writeText(resultText).then(() => {
+            alert('拼音结果已复制到剪贴板');
+        }).catch(err => {
+            alert('复制失败，请手动复制');
+            console.error('复制失败:', err);
+        });
     }
 </script>
 </body>

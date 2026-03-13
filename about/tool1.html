@@ -1,25 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片去水印</title>
+    <title>图片去水印 - 免费在线图片处理工具</title>
+    <meta name="description" content="免费在线图片去水印工具，本地处理保护隐私，无需下载软件，一键去除图片中的水印、文字、logo等多余元素，处理后可直接下载高清无水印图片。">
     <style>
-        body{padding:20px;text-align:center}
-        #canvas{border:1px solid #ccc;margin:20px auto}
-        .btn{padding:10px 16px;margin:10px}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            padding:20px;
+            max-width:800px;
+            margin:0 auto;
+            font-family:'Microsoft YaHei', Arial, sans-serif;
+            background-color:#f8f9fa;
+            color:#333;
+            text-align:center;
+        }
+        header{
+            margin-bottom:30px;
+            padding-bottom:20px;
+            border-bottom:1px solid #eee;
+        }
+        h3{
+            font-size:24px;
+            color:#2c3e50;
+            margin-bottom:15px;
+        }
+        .tool-desc{
+            font-size:16px;
+            color:#666;
+            line-height:1.6;
+            margin-bottom:20px;
+            max-width:600px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .privacy-tip{
+            color:#e74c3c;
+            font-size:14px;
+            margin:10px 0;
+            padding:10px;
+            background:#ffeaea;
+            border-radius:8px;
+            display:inline-block;
+        }
+        #canvas{
+            border:1px solid #ddd;
+            margin:20px auto;
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+        }
+        .btn{
+            padding:12px 20px;
+            margin:10px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:16px;
+            transition:all 0.3s ease;
+        }
+        #downloadBtn{
+            display:none;
+            text-decoration:none;
+            background:#42b983;
+            color:white;
+            box-shadow:0 2px 6px rgba(66,185,131,0.2);
+        }
+        #downloadBtn:hover{
+            background:#36a972;
+        }
+        .back-home{
+            display:inline-block;
+            margin-top:30px;
+            padding:10px 20px;
+            background:#3498db;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            box-shadow:0 2px 6px rgba(52,152,219,0.2);
+        }
+        .back-home:hover{
+            background:#2980b9;
+        }
+        footer{
+            text-align:center;
+            margin-top:40px;
+            padding-top:20px;
+            border-top:1px solid #eee;
+            color:#999;
+            font-size:14px;
+        }
     </style>
 </head>
 <body>
-<h3>图片去水印</h3>
-<p>免费在线图片去水印工具，无需下载软件，本地处理图片不泄露隐私，支持一键去除图片中的水印、文字、logo等多余元素，处理后可直接下载高清无水印图片。</p>
-<input type="file" id="file" accept="image/*">
+<header>
+    <h3>免费在线图片去水印工具</h3>
+    <p class="tool-desc">本工具支持本地处理图片去水印，无需将图片上传至服务器，有效保护您的隐私安全。可去除图片中的水印、文字、logo等多余元素，处理后的图片可直接下载，保持高清画质。</p>
+    <p class="privacy-tip">✅ 所有图片均在本地浏览器处理，不会上传至任何服务器</p>
+</header>
+
+<input type="file" id="file" accept="image/*" class="btn" style="background:#f5f5f5;color:#333;">
 <br>
 <canvas id="canvas" width="350" height="350"></canvas>
 <br>
 <!-- 下载按钮 -->
-<a id="downloadBtn" class="btn" style="display:none;text-decoration:none;background:#42b983;color:white;border-radius:4px" download="no-watermark.jpg">下载处理后图片</a>
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
+<a id="downloadBtn" class="btn" download="no-watermark.jpg">下载处理后图片</a>
+
+<br>
+<a class="back-home" href="../index.html">返回工具首页</a>
+
+<footer>
+    <p>本工具仅提供基础图片去水印功能，复杂水印可能需要专业软件处理 | 隐私保障：本地处理，无数据上传</p>
+</footer>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 <script>
     const canvas = document.getElementById('canvas')
     const ctx = canvas.getContext('2d')
@@ -31,11 +129,18 @@
         r.onload = ev => {
             img.src = ev.target.result
             img.onload = () => {
-                ctx.drawImage(img, 0, 0, 350, 350)
+                // 保持图片比例
+                const ratio = Math.min(350/img.width, 350/img.height);
+                const w = img.width * ratio;
+                const h = img.height * ratio;
+                canvas.width = w;
+                canvas.height = h;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, w, h);
                 // 上传后显示下载按钮
-                downloadBtn.style.display = 'inline-block'
+                downloadBtn.style.display = 'inline-block';
                 // 绑定下载地址
-                downloadBtn.href = canvas.toDataURL('image/jpeg')
+                downloadBtn.href = canvas.toDataURL('image/jpeg', 0.9);
             }
         }
         r.readAsDataURL(e.target.files[0])
