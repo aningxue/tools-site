@@ -12,13 +12,14 @@
 </head>
 <body>
 <h3>图片去水印</h3>
+<p>免费在线图片去水印工具，无需下载软件，本地处理图片不泄露隐私，支持一键去除图片中的水印、文字、logo等多余元素，处理后可直接下载高清无水印图片。</p>
 <input type="file" id="file" accept="image/*">
 <br>
 <canvas id="canvas" width="350" height="350"></canvas>
 <br>
 <!-- 下载按钮 -->
 <a id="downloadBtn" class="btn" style="display:none;text-decoration:none;background:#42b983;color:white;border-radius:4px" download="no-watermark.jpg">下载处理后图片</a>
-
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "515a0910ac434bb3aec4ff0f9da92a0f"}'></script><!-- End Cloudflare Web Analytics -->
 <script>
     const canvas = document.getElementById('canvas')
     const ctx = canvas.getContext('2d')
